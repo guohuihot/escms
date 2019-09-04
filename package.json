@@ -1,7 +1,7 @@
 {
-  "name": "escms",
+  "name": "escms1",
   "version": "1.0.0",
-  "description": "esmcs",
+  "description": "My super-excellent Nuxt.js project",
   "author": "Ahuing",
   "private": true,
   "scripts": {
@@ -11,20 +11,15 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "nuxt": "^2.0.0",
     "cross-env": "^5.2.0",
-    "express": "^4.16.4",
     "element-ui": "^2.4.11",
-    "@nuxtjs/axios": "^5.3.6",
-    "eslint": "^4.15.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.7.1",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-node": "^5.2.0",
-    "eslint-plugin-promise": "^3.8.0",
-    "eslint-plugin-standard": "^3.1.0",
-    "eslint-plugin-vue": "^5.2.2",
+    "koa": "^2.6.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-convert": "^1.2.0",
+    "koa-cors": "^0.0.16",
+    "koa-router": "^7.4.0",
+    "monk": "^7.0.0",
+    "nuxt": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.9"

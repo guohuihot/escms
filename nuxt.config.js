@@ -31,13 +31,6 @@ module.exports = {
   plugins: [
     '@/plugins/element-ui'
   ],
-
-  serverMiddleware: [
-      // Will register file from project api directory to handle /api/* requires
-      // { path: '/api', handler: '~/api/index.js' },
-      '~/server/api/index.js'
-
-  ],
   /*
   ** Nuxt.js dev-modules
   */
@@ -47,15 +40,7 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
   ],
-  /*
-  ** Axios module configuration
-  ** See https://axios.nuxtjs.org/options
-  */
-  axios: {
-  },
   /*
   ** Build configuration
   */
