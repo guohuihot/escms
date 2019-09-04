@@ -19,7 +19,8 @@
     "koa-cors": "^0.0.16",
     "koa-router": "^7.4.0",
     "monk": "^7.0.0",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "require-all": "^3.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.9"

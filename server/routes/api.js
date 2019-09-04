@@ -1,13 +1,23 @@
-const router = require('koa-router')();
-const perf = require('../controller/perf');
+const router = require('koa-router')()
+const controllers = require('require-all')({
+    dirname     :  `${__dirname}/../controllers`,
+    // filter      :  /(.+Controller)\.js$/,
+    excludeDirs :  /^\.(git|svn)$/,
+    recursive   : true
+})
+router.prefix('/api')
 
-router.prefix('/api');
-
-/*保存perfData接口*/
-router.post('/savePerf', perf.savePerf);
-/*获取perfData接口*/
-router.get('/getPerf', perf.getPerf);
 /*获取分类接口*/
-router.get('/getCategory', perf.getCategory);
+Object.keys(controllers).forEach(key => {
+    let controller = controllers[key]
+    if (controller instanceof Function) {
+        router
+            .get(`/${key}`, controller)
+            .post(`/${key}`, controller)
+            .put(`/${key}/:id`, controller)
+            .del(`/${key}/:id`, controller)
+            .all(`/${key}/:id`, controller)
+    }
+})
 
 module.exports = router
