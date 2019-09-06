@@ -2,7 +2,7 @@
     <div class="container">
         <div>
             <h1 class="title">
-                escms1
+                list
             </h1>
             {{ data }}
         </div>

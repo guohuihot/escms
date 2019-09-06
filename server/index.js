@@ -7,10 +7,9 @@ const bodyParser = require('koa-bodyparser')
 const cors = require('koa-cors')
 const convert = require('koa-convert')
 
-const api = require('./routes/api')
-
 const app = new Koa()
 
+const api = require('./routes/api')
 // 进行requestbody解析
 app.use(bodyParser())
 // 加入路由
@@ -19,6 +18,8 @@ app.use(bodyParser())
 app.use(convert(cors()))
 // 路由处理，在api中
 app.use(api.routes(), api.allowedMethods())
+const view = require('./routes/view')
+app.use(view.routes(), view.allowedMethods())
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')

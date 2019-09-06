@@ -1,3 +1,4 @@
+const serveStatic = require('serve-static')
 
 module.exports = {
   mode: 'universal',
@@ -31,11 +32,23 @@ module.exports = {
   plugins: [
     '@/plugins/element-ui'
   ],
+
+  serverMiddleware: [
+      // Will register redirect-ssl npm package
+      // 'redirect-ssl',
+
+      // Will register file from project api directory to handle /api/* requires
+      // { path: '/api', handler: '~/api/index.js' },
+
+      // We can create custom instances too
+      // { path: '/static2', handler: serveStatic(__dirname + '/static2') }
+  ],
   /*
   ** Nuxt.js dev-modules
   */
   buildModules: [
   ],
+
   /*
   ** Nuxt.js modules
   */
