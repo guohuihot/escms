@@ -9,6 +9,9 @@ const convert = require('koa-convert')
 
 const app = new Koa()
 
+// data数据库相关
+require('./models')
+
 const api = require('./routes/api')
 // 进行requestbody解析
 app.use(bodyParser())
@@ -18,14 +21,15 @@ app.use(bodyParser())
 app.use(convert(cors()))
 // 路由处理，在api中
 app.use(api.routes(), api.allowedMethods())
-const view = require('./routes/view')
-app.use(view.routes(), view.allowedMethods())
+// const view = require('./routes/view')
+// app.use(view.routes(), view.allowedMethods())
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
 config.dev = app.env !== 'production'
 
 async function start () {
+
     // Instantiate nuxt.js
     const nuxt = new Nuxt(config)
 

@@ -24,6 +24,7 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    '@/assets/css/main.scss',
     'element-ui/lib/theme-chalk/index.css'
   ],
   /*
@@ -57,12 +58,33 @@ module.exports = {
   /*
   ** Build configuration
   */
-  build: {
-    transpile: [/^element-ui/],
-    /*
-    ** You can extend webpack config here
-    */
-    extend (config, ctx) {
-    }
+    build: {
+        transpile: [/^element-ui/],
+        /*
+         ** You can extend webpack config here
+         */
+        extend(config, ctx) {},
+        postcss: {
+            "plugins": {
+                "postcss-import": {},
+                "postcss-url": {},
+                // to edit target browsers: use "browserslist" field in package.json
+                "autoprefixer": {}
+            }
+        }
+    },
+  mongodb: {
+    host: '127.0.0.1',
+    database: 'escms',
+    port: 27017,
+    username: '',
+    password: '',
+  },
+  user: {
+    role: 'superAdmin',
+    username: 'admin',
+    password: 'admin',
+    nickname: 'abcdefg',
+    email: 'guohuihot@163.com',
   }
 }
