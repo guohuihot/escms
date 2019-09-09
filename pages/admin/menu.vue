@@ -80,13 +80,11 @@
     </div>
 </template>
 <script>
-import axios                   from 'axios'
 // import YsButtonDialog             from '@/components/YsButtonDialog'
 // import YsButtonAjax               from '@/components/YsButtonAjax'
 // import { localStorageRemoveItem } from '@/util/utils'
 
 export default {
-    name: 'ClassAreas',
     components: {
         // YsButtonDialog,
         // YsButtonAjax,
@@ -95,7 +93,7 @@ export default {
     data() {
         return {
             title: '区域',
-            URL: 'http://localhost:3000/api/menu',
+            URL: '/api/menu',
             props: {
                 label: 'name',
                 isLeaf: 'leaf'
@@ -122,22 +120,21 @@ export default {
         }
     },
     computed: {},
-    created() {
-
-    },
     methods: {
         async loadNode(node, resolve) {
             if (node.level === 0) {
                 this.loading = true
-                let res = await axios.get(this.URL + '/0')
+                // let res = await this.$axios.$get(this.URL, { parent_id: 0 })
+                let res = await this.$axios.$get(`${this.URL}?parent_id=0`)
                 // console.log(res, 888);
                 this.loading = false
-                resolve(res.data.data)
-                this.defaultExpandedKeys = res.data.data.map(item => item.id)
+                resolve(res.data)
+                this.defaultExpandedKeys = res.data.map(item => item.id)
             }
             if (node.level > 0) {
-                let res = await axios.get(this.URL + '/' + node.data.id)
-                resolve(res.data.data)
+                // let res = await this.$axios.$get(this.URL, { parent_id: node.data.id })
+                let res = await this.$axios.$get(`${this.URL}?parent_id=${node.data.id}`)
+                // resolve(res.data)
             }
         },
         append(node, data, newChild) {

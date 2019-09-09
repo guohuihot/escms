@@ -6,8 +6,11 @@ const controllers = require('require-all')({
     recursive   : true
 })
 router.prefix('/api')
-router.get('/menu', controllers.menu.getMenu)
-router.get('/menu/:parent_id', controllers.menu.getMenu)
-router.get('/user', controllers.user.getUser)
+
+router
+    .get('/menu', controllers.menu.getMenu)
+    .get('/menu/:id', controllers.menu.getMenu)
+    .get('/menu/parent_id/:parent_id', controllers.menu.getMenu)
+    .get('/user', controllers.user.getUser)
 
 module.exports = router

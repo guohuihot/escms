@@ -9,9 +9,9 @@ const initMenu = async () => {
 }
 initMenu().catch(err => {})
 exports.getMenu = async (ctx) => {
-    console.log(ctx.params, 333);
+    // console.log(666, Object.assign({}, ctx.params, ctx.query));
     try {
-        menus = await Menu.find(ctx.params)
+        let menus = await Menu.find(Object.assign({}, ctx.params, ctx.query))
         ctx.status = 200
         ctx.body = JSON.stringify({
             status: 1,

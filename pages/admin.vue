@@ -2,6 +2,7 @@
     <el-container style="height: 100vh;">
         <el-aside width="200px" :style="`background-color: ${menuStyle.backgroundColor}`">
             <el-menu
+                v-if="false"
                 default-active="1-4-1"
                 class="el-menu-vertical-demo"
                 :collapse="isCollapse"
@@ -106,14 +107,13 @@
     </el-container>
 </template>
 <script>
-import axios from 'axios'
 
 export default {
-    async asyncData({ params }) {
-        let res = await axios.get(`http://localhost:3000/api/menu`)
-        // console.log(res.data)
+    async asyncData({ params, $axios }) {
+        let res = await $axios.$get(`/api/menu`)
+        // console.log(res)
         return {
-            menuData: res.data.data
+            menuData: res.data
         }
     },
     data() {
@@ -127,6 +127,9 @@ export default {
                 activeTextColor: '#ffd04b',
             }
         }
+    },
+    created() {
+        this.$store.dispatch('getSubMenuData')
     },
     methods: {
         handleOpen(key, keyPath) {

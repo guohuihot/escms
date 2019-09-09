@@ -145,5 +145,6 @@ module.exports = {
     platform: true,
     platformApi: true,
     platformTag: true,
+    $axios: true,
   },
 }

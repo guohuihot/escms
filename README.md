@@ -1,4 +1,4 @@
-# escms1
+# escms
 
 > My super-excellent Nuxt.js project
 
