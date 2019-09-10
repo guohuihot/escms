@@ -83,6 +83,7 @@
 // import YsButtonDialog             from '@/components/YsButtonDialog'
 // import YsButtonAjax               from '@/components/YsButtonAjax'
 // import { localStorageRemoveItem } from '@/util/utils'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
     components: {
@@ -119,14 +120,14 @@ export default {
             loading: false
         }
     },
-    computed: {},
+    computed: {
+    },
     methods: {
         async loadNode(node, resolve) {
             if (node.level === 0) {
                 this.loading = true
-                // let res = await this.$axios.$get(this.URL, { parent_id: 0 })
-                let res = await this.$axios.$get(`${this.URL}?parent_id=0`)
-                // console.log(res, 888);
+                let res = await this.$axios.$get(this.URL, { parent_id: 0 })
+                // let res = await this.$axios.$get(`${this.URL}?parent_id=0`)
                 this.loading = false
                 resolve(res.data)
                 this.defaultExpandedKeys = res.data.map(item => item.id)
@@ -134,7 +135,7 @@ export default {
             if (node.level > 0) {
                 // let res = await this.$axios.$get(this.URL, { parent_id: node.data.id })
                 let res = await this.$axios.$get(`${this.URL}?parent_id=${node.data.id}`)
-                // resolve(res.data)
+                resolve(res.data)
             }
         },
         append(node, data, newChild) {

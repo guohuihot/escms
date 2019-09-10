@@ -1,63 +1,75 @@
 <template>
     <el-container style="height: 100vh;">
-        <el-aside width="200px" :style="`background-color: ${menuStyle.backgroundColor}`">
+        <el-aside
+            width="200px"
+            :style="`background-color: ${menuStyle.backgroundColor}`"
+        >
             <el-menu
-                v-if="false"
-                default-active="1-4-1"
+                :default-active="subMenuActive"
                 class="el-menu-vertical-demo"
                 :collapse="isCollapse"
                 :background-color="menuStyle.backgroundColor"
                 :text-color="menuStyle.textColor"
                 :active-text-color="menuStyle.activeTextColor"
                 router
+                :collapse-transition="false"
+                :default-openeds="isCollapse ? [] : openeds"
                 @open="handleOpen"
                 @close="handleClose"
             >
-                <el-submenu index="1">
-                    <template slot="title">
-                        <i class="el-icon-location" />
-                        <span slot="title">导航一</span>
-                    </template>
-                    <el-menu-item-group>
-                        <span slot="title">分组一</span>
-                        <el-menu-item index="1-1">
-                            选项1
-                        </el-menu-item>
-                        <el-menu-item index="1-2">
-                            选项2
-                        </el-menu-item>
-                    </el-menu-item-group>
-                    <el-menu-item-group title="分组2">
-                        <el-menu-item index="1-3">
-                            选项3
-                        </el-menu-item>
-                    </el-menu-item-group>
-                    <el-submenu index="1-4">
-                        <span slot="title">选项4</span>
-                        <el-menu-item index="1-4-1">
-                            选项1
+                <template
+                    v-for="(item, index) in subMenuData"
+                >
+                    <el-submenu
+                        v-if="item.children"
+                        :key="index"
+                        :index="index + ''"
+                    >
+                        <template
+                            slot="title"
+                            class="el-title"
+                        >
+                            <i :class="item.ico" />
+                            <span>{{ item.name }}</span>
+                        </template>
+                        <el-menu-item
+                            v-for="(item1, index1) in item.children"
+                            :key="index1"
+                            :index="item1.value || (index + '-' + index1)"
+                            :route="{name: item1.value}"
+                        >
+                            {{ item1.name }}<el-badge
+                                class="mark"
+                                :value="item1.mark"
+                            />
                         </el-menu-item>
                     </el-submenu>
-                </el-submenu>
-                <el-menu-item index="2">
-                    <i class="el-icon-menu" />
-                    <span slot="title">导航二</span>
-                </el-menu-item>
-                <el-menu-item
-                    index="3"
-                    disabled
-                >
-                    <i class="el-icon-document" />
-                    <span slot="title">导航三</span>
-                </el-menu-item>
-                <el-menu-item index="4">
-                    <i class="el-icon-setting" />
-                    <span slot="title">导航四</span>
-                </el-menu-item>
+
+                    <el-menu-item
+                        v-else
+                        :key="index"
+                        class="el-submenu__title"
+                        :index="item.value || (index + '')"
+                        :route="{name: item.value}"
+                    >
+                        <i :class="item.ico" />
+                        <span slot="title">{{ item.name }}<el-badge
+                            class="mark"
+                            :value="item.mark"
+                        /></span>
+                    </el-menu-item>
+                </template>
             </el-menu>
         </el-aside>
         <el-container>
             <el-header style="padding: 0;">
+                <div
+                    style="padding: 5px;text-align: center;cursor: pointer;float: left"
+                    @click="isCollapse = !isCollapse"
+                >
+                    <i :class="['el-icon-s-fold', 'el-icon-s-unfold'][isCollapse * 1]" />
+                    {{ {true: '展开', false: '收起'}[isCollapse] }}
+                </div>
                 <el-menu
                     :default-active="activeIndex"
                     class="el-menu-demo"
@@ -68,54 +80,41 @@
                     :active-text-color="menuStyle.activeTextColor"
                     @select="handleSelect"
                 >
-                    <el-menu-item :index="item.value" :key="item.value" v-for="(item, i) in menuData">
+                    <el-menu-item
+                        v-for="(item, i) in menuData"
+                        :key="item.value"
+                        :index="item.value"
+                    >
                         {{ item.name }}
                     </el-menu-item>
-                    <el-submenu index="2" style="float: right;">
+                    <el-submenu
+                        index="2"
+                        style="float: right;"
+                    >
                         <template slot="title">
                             abcdefg
                         </template>
                         <el-menu-item index="2-1">
-                            选项1
+                            我的资料
                         </el-menu-item>
                         <el-menu-item index="2-2">
                             选项2
                         </el-menu-item>
                         <el-menu-item index="2-3">
-                            选项3
+                            退出
                         </el-menu-item>
-                        <el-submenu index="2-4">
-                            <template slot="title">
-                                选项4
-                            </template>
-                            <el-menu-item index="2-4-1">
-                                选项1
-                            </el-menu-item>
-                            <el-menu-item index="2-4-2">
-                                选项2
-                            </el-menu-item>
-                            <el-menu-item index="2-4-3">
-                                选项3
-                            </el-menu-item>
-                        </el-submenu>
                     </el-submenu>
                 </el-menu>
             </el-header>
-            <el-main style="background-color: #fff"><nuxt-child /></el-main>
-            <el-footer style="background-color: #fff">@escms</el-footer>
+            <el-main><nuxt-child /></el-main>
+            <el-footer><!-- @escms --></el-footer>
         </el-container>
     </el-container>
 </template>
 <script>
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
-    async asyncData({ params, $axios }) {
-        let res = await $axios.$get(`/api/menu`)
-        // console.log(res)
-        return {
-            menuData: res.data
-        }
-    },
     data() {
         return {
             isCollapse: false,
@@ -128,10 +127,38 @@ export default {
             }
         }
     },
-    created() {
-        this.$store.dispatch('getSubMenuData')
+    async asyncData({ params, $axios }) {
+        /*let res = await $axios.$get(`/api/menu`)
+        // console.log(res)
+        return {
+            menuData: res.data
+        }*/
+    },
+    computed: {
+        ...mapGetters({
+            menuData: 'menu/menuData',
+            menuActive: 'menu/menuActive',
+            subMenuData: 'menu/subMenuData',
+            subMenuActive: 'menu/subMenuActive',
+            // 'userInfo',
+        }),
+        openeds() {
+            let arr = []
+            this.subMenuData.forEach(function(item, i) {
+                arr.push(`${i}`)
+            })
+            return arr
+        }
+    },
+    mounted() {
+        this.getSubMenuData({
+            route: this.$route
+        })
     },
     methods: {
+        ...mapActions({
+            getSubMenuData: 'menu/getSubMenuData',
+        }),
         handleOpen(key, keyPath) {
             console.log(key, keyPath)
         },
@@ -147,24 +174,20 @@ export default {
 </script>
 <style>
   .el-header, .el-footer {
-    background-color: #B3C0D1;
     color: #333;
     text-align: center;
     line-height: 60px;
   }
 
   .el-aside {
-    background-color: #D3DCE6;
     color: #333;
     text-align: center;
     line-height: 200px;
   }
 
   .el-main {
-    background-color: #E9EEF3;
     color: #333;
     text-align: center;
-    line-height: 160px;
   }
 
   body > .el-container {
@@ -173,10 +196,8 @@ export default {
 
   .el-container:nth-child(5) .el-aside,
   .el-container:nth-child(6) .el-aside {
-    line-height: 260px;
   }
 
   .el-container:nth-child(7) .el-aside {
-    line-height: 320px;
   }
 </style>

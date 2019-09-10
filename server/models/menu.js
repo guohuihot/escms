@@ -11,7 +11,7 @@ const schema = new Schema({
         default: ''
     },
     parent_id: {
-        type: Number,
+        type: String,
         default: 0
     },
     no_delete: {

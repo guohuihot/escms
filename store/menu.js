@@ -71,13 +71,13 @@ const options = [
     },
 ]
 
-export const state = {
+export const state = () => ({
     // 数据信息
     menuData: [],
     menuActive: '',
     subMenuData: [],
     subMenuActive: '',
-}
+})
 // 鉴权
 const checkAuth = (menu, userInfo) => {
     return true
@@ -115,7 +115,7 @@ export const actions = {
             // 是否可见
             .filter(item => checkAuth(item, rootGetters.userInfo))*/
         let ajaxFn = async () => {
-            const res = await this.$axios.$get('menu')
+            const res = await this.$axios.$get('api/menu')
             const data = getTree(res.data)
             let subMenuData = []
             let menuActive = ''
@@ -125,7 +125,7 @@ export const actions = {
                         if (menu.value == key) {
                             if (menu.children) {
                                 // 是否可见
-                                subMenuData = menu.children.filter(item => checkAuth(item, rootGetters.userInfo))
+                                subMenuData = menu.children//.filter(item => checkAuth(item, rootGetters.userInfo))
                             } else if (menu.subs) {
                                 // 兼容二级
                                 menu.subs.forEach(menu1 => {
@@ -153,13 +153,6 @@ export const actions = {
     }
 }
 
-export const getters = {
-    menuData  : state => state.menuData,
-    menuActive: state => state.menuActive,
-    subMenuData      : state => state.subMenuData,
-    subMenuActive    : state => state.subMenuActive,
-}
-
 export const mutations = {
     setSubMenuData(state, data) {
         state.subMenuData = data
@@ -173,4 +166,11 @@ export const mutations = {
     setMenuActive(state, menuActive) {
         state.menuActive = menuActive
     },
+}
+
+export const getters = {
+    menuData  : state => state.menuData,
+    menuActive: state => state.menuActive,
+    subMenuData      : state => state.subMenuData,
+    subMenuActive    : state => state.subMenuActive,
 }

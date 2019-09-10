@@ -15,7 +15,7 @@ exports.getMenu = async (ctx) => {
         ctx.status = 200
         ctx.body = JSON.stringify({
             status: 1,
-            data: menus,
+            data: menus || [],
             /*data: [
                 { title: '常规管理', value: '/admin/common' },
                 { title: '会员管理', value: '/admin/member' },
