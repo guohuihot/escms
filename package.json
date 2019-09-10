@@ -23,7 +23,8 @@
     "md5": "^2.2.1",
     "mongoose": "^5.6.13",
     "nuxt": "^2.0.0",
-    "require-all": "^3.0.0"
+    "require-all": "^3.0.0",
+    "vue-baidu-map": "^0.21.22"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",

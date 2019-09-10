@@ -10,6 +10,10 @@ const schema = new Schema({
         type: String,
         default: ''
     },
+    slug: {
+        type: String,
+        default: ''
+    },
     parent_id: {
         type: String,
         default: 0

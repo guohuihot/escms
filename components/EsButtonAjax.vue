@@ -7,7 +7,8 @@
             :plain="plain"
             :disabled="disabled"
             :style="btnStyle"
-            @click="handleClick"><slot>{{ title }}</slot></el-button>
+            @click="handleClick"
+        ><slot>{{ title }}</slot></el-button>
     </span>
 </template>
 
@@ -16,22 +17,26 @@
 import button from '@/components/mixins/button'
 
 export default {
-    name: 'YsButtonAjax',
     components: {
     },
     mixins: [button],
     props: {
         url: {
-             type: String,
-             default: ''
+            type: String,
+            default: ''
         },
         id: { //Help id
-            type: [String, Number, Array],
+            type: [
+                String,
+                Number,
+                Array
+            ],
+            default: ''
         },
         clickBefore: {
             type: Function,
             default() {
-                return () => true;
+                return () => true
             }
         },
         info: {
@@ -63,12 +68,10 @@ export default {
     },
     computed: {
     },
-    created() {
-    },
     methods: {
         handleClick() {
             if (!this.clickBefore()) {
-                return;
+                return
             }
             if (this.isConfirm) {
                 this.$confirm(this.info, this.title, {
@@ -76,14 +79,14 @@ export default {
                     cancelButtonText: '取消',
                     type: 'warning',
                     dangerouslyUseHTMLString: this.dangerouslyUseHTMLString
-                }).then(this.handleAjax).catch(() => {});
+                }).then(this.handleAjax)
             } else {
                 this.handleAjax()
             }
         },
         handleAjax() {
             if (this.id) {
-                this.params.id = this.id;
+                this.params.id = this.id
             }
             this.$axios({
                 url: this.url,
@@ -93,9 +96,9 @@ export default {
                 this.$message({
                     message: res.message,
                     type: 'success',
-                });
+                })
                 this.$emit('ajaxThen', res)
-            }).catch(() => {})
+            })
         }
     }
 }

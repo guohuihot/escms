@@ -1,5 +1,9 @@
 export default function ({ $axios, redirect }) {
     $axios.onRequest(config => {
+        console.log(config, 87);
+        if (config.method == 'get') {
+            config.params = Object.assign({}, config.params, config.data)
+        }
         console.log(`Making request to ${config.url}`)
     })
 

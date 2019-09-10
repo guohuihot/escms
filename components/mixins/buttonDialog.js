@@ -1,7 +1,5 @@
 // import a from '@/components/a'
 import extend from 'extend'
-import { ajax } from '@/fetch/api'
-
 import categories from '@/components/mixins/categories'
 export default {
     components: {
@@ -21,7 +19,10 @@ export default {
             default: 520
         },
         labelWidth: {
-            type: [Number, String],
+            type: [
+                Number,
+                String
+            ],
             default: 90
         },
         formItems: {
@@ -100,16 +101,17 @@ export default {
                             this.categories[item.name] = { data: [] }
                         }
                     }
-                    if (['radio', 'checkbox'].includes(item.type)) {
+                    if ([
+                        'radio',
+                        'checkbox'
+                    ].includes(item.type)) {
                         this.categories[item.name] = { data: [] }
                     }
                     if (item.type == 'editor') {
                         this.editor[item.name] = 1
                     }
 
-
                     if (item.children) {
-
                         item.children.forEach((item1) => {
                             //赋初始值, 0 也可以赋值
                             // 一定要赋值，否则监控不到，影响表单验证
@@ -121,7 +123,10 @@ export default {
                                     this.categories[item1.name] = { data: [] }
                                 }
                             }
-                            if (['radio', 'checkbox'].includes(item1.type)) {
+                            if ([
+                                'radio',
+                                'checkbox'
+                            ].includes(item1.type)) {
                                 this.categories[item1.name] = { data: [] }
                             }
                             if (item1.type == 'editor') {
@@ -141,7 +146,6 @@ export default {
         extend(true, this.buttonsItems, this.buttons)
     },
     methods: {
-        ajax,
         // 这个随后删除
         handleDialogShow() {
             if (this.clickBefore()) {
@@ -171,7 +175,7 @@ export default {
             if (this._ajaxBefore(this.data)) {
                 let method = this.data.id ? 'put' : 'post'
                 this.loading = true
-                ajax({
+                this.$axios({
                     url: this.url,
                     method,
                     data: this.data

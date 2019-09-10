@@ -10,7 +10,7 @@ router.prefix('/api')
 router
     .get('/menu', controllers.menu.getMenu)
     .get('/menu/:id', controllers.menu.getMenu)
-    .get('/menu/parent_id/:parent_id', controllers.menu.getMenu)
+    .post('/menu', controllers.menu.postMenu)
     .get('/user', controllers.user.getUser)
 
 module.exports = router

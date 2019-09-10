@@ -103,5 +103,11 @@ module.exports = {
         password: 'admin',
         nickname: 'abcdefg',
         email: 'guohuihot@163.com',
+    },
+    map: {
+        ak: '1hrKaakG5iBUhv99pka4XCdvhphi4014'
+    },
+    editor: {
+        url: `laravel-u-editor/`
     }
 }

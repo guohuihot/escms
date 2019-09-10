@@ -32,3 +32,18 @@ exports.getMenu = async (ctx) => {
         }
     }
 }
+exports.postMenu = async (ctx) => {
+    try {
+        let menus = await Menu.create(ctx.request.body)
+        ctx.status = 200
+        ctx.body = JSON.stringify({
+            status: 1,
+            data: menus,
+        })
+    } catch (error) {
+        ctx.body = {
+            error: 1,
+            info: error
+        }
+    }
+}

@@ -34,13 +34,13 @@
                     style="width: 100%;"
                 >
                     <el-col :span="12">
-                        {{ data.id }} - {{ node.label }}
+                        {{ node.label }}
                     </el-col>
                     <el-col
                         :span="12"
                         class="text-right"
                     >
-                        <!-- <ys-button-dialog
+                        <es-button-dialog
                             :url="URL"
                             title="添加"
                             type="text"
@@ -51,7 +51,7 @@
                             :form-items="formItems"
                             @ajaxThen="(res) => append(node, data, res.data)"
                         />
-                        <ys-button-dialog
+                        <!-- <es-button-dialog
                             :url="URL"
                             title="修改"
                             type="text"
@@ -60,19 +60,18 @@
                             :params="data"
                             :form-items="formItems"
                             @ajaxThen="(res) => edit(node, data, res.data)"
-                        />
+                        /> -->
 
-                        <ys-button-ajax
+                        <!-- <es-button-ajax
                             :id="data.id"
                             :url="URL"
+                            title="删除"
                             class="text-danger"
                             type="text"
                             size="mini"
                             method="delete"
                             @ajaxThen="() => remove(node, data)"
-                        >
-                            删除
-                        </ys-button-ajax> -->
+                        /> -->
                     </el-col>
                 </el-row>
             </template>
@@ -80,15 +79,15 @@
     </div>
 </template>
 <script>
-// import YsButtonDialog             from '@/components/YsButtonDialog'
-// import YsButtonAjax               from '@/components/YsButtonAjax'
-// import { localStorageRemoveItem } from '@/util/utils'
+import EsButtonDialog                           from '@/components/EsButtonDialog'
+import EsButtonAjax                             from '@/components/EsButtonAjax'
+// import { localStorageRemoveItem }            from '@/util/utils'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
     components: {
-        // YsButtonDialog,
-        // YsButtonAjax,
+        EsButtonDialog,
+        EsButtonAjax,
     },
     mixins: [],
     data() {
@@ -107,7 +106,11 @@ export default {
                     children: [
                         {
                             label: '标题',
-                            name: 'title',
+                            name: 'name',
+                        },
+                        {
+                            label: 'URL',
+                            name: 'value',
                         },
                         {
                             label: '别名',
@@ -126,16 +129,26 @@ export default {
         async loadNode(node, resolve) {
             if (node.level === 0) {
                 this.loading = true
-                let res = await this.$axios.$get(this.URL, { parent_id: 0 })
+                let res = await this.$axios({
+                    url: this.URL,
+                    data: {
+                        parent_id: 0
+                    }
+                })
                 // let res = await this.$axios.$get(`${this.URL}?parent_id=0`)
                 this.loading = false
                 resolve(res.data)
                 this.defaultExpandedKeys = res.data.map(item => item.id)
             }
             if (node.level > 0) {
-                // let res = await this.$axios.$get(this.URL, { parent_id: node.data.id })
-                let res = await this.$axios.$get(`${this.URL}?parent_id=${node.data.id}`)
-                resolve(res.data)
+                let res = await this.$axios({
+                    url: this.URL,
+                    data: {
+                        parent_id: node.data.id
+                    }
+                })
+                // let res = await this.$axios.$get(`${this.URL}?parent_id=${node.data.id}`)
+                // resolve(res.data)
             }
         },
         append(node, data, newChild) {
