@@ -1,7 +1,7 @@
 {
   "name": "escms",
   "version": "1.0.0",
-  "description": "My super-excellent Nuxt.js project",
+  "description": "escms",
   "author": "Ahuing",
   "private": true,
   "scripts": {
@@ -15,15 +15,18 @@
     "cross-env": "^5.2.0",
     "dayjs": "^1.8.6",
     "element-ui": "^2.4.11",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.1",
     "koa-convert": "^1.2.0",
     "koa-cors": "^0.0.16",
+    "koa-jwt": "^3.6.0",
     "koa-router": "^7.4.0",
     "md5": "^2.2.1",
     "mongoose": "^5.6.13",
     "nuxt": "^2.0.0",
     "require-all": "^3.0.0",
+    "svg-captcha": "^1.4.0",
     "vue-baidu-map": "^0.21.22"
   },
   "devDependencies": {

@@ -1,13 +1,14 @@
-const Koa = require('koa')
-const consola = require('consola')
+const Koa               = require('koa')
+const consola           = require('consola')
 const { Nuxt, Builder } = require('nuxt')
-// const router = require('koa-router')()
-const bodyParser = require('koa-bodyparser')
-// const Monk = require('monk')
-const cors = require('koa-cors')
-const convert = require('koa-convert')
+const bodyParser        = require('koa-bodyparser')
+const cors              = require('koa-cors')
+const convert           = require('koa-convert')
+const koajwt            = require('koa-jwt')
 
-const app = new Koa()
+const sendHandle        = require('./middlewares/sendHandle.js')
+const errorHandle       = require('./middlewares/errorHandle.js')
+const app               = new Koa()
 
 // data数据库相关
 require('./models')
@@ -19,17 +20,30 @@ app.use(bodyParser())
 // app.use(router.routes())
 // 处理跨域
 app.use(convert(cors()))
+// 引入中间件
+app.use(sendHandle())
+// 错误处理
+app.use(errorHandle)
+// 验证token
+app.use(koajwt({
+    secret: 'token'
+}).unless({
+    path: [
+        /^\/api\/login/,
+        /^\/api\/register/,
+        /^\/api\/captcha/,
+        /^((?!\/api).)*$/   // 设置除了私有接口外的其它资源，可以不需要认证访问
+    ]
+}))
+
 // 路由处理，在api中
 app.use(api.routes(), api.allowedMethods())
-// const view = require('./routes/view')
-// app.use(view.routes(), view.allowedMethods())
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
 config.dev = app.env !== 'production'
 
 async function start () {
-
     // Instantiate nuxt.js
     const nuxt = new Nuxt(config)
 

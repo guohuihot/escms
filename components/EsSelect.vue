@@ -13,8 +13,8 @@
         <el-option
             v-for="(item, i) in data"
             :key="i"
-            :label="item.type_name"
-            :value="item.type_id"
+            :label="item.label"
+            :value="item.value"
         />
     </el-select>
 </template>

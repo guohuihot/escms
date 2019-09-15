@@ -4,27 +4,15 @@
             <h1 class="title">
                 list
             </h1>
-            {{ data }}
         </div>
     </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import axios from 'axios'
 
 export default {
     components: {
-        Logo
     },
-
-    async asyncData({ params }) {
-        let res = await axios.get(`http://localhost:3000/api/category`)
-        console.log(res.data)
-        return {
-            data: res.data.data
-        }
-    }
 }
 </script>
 

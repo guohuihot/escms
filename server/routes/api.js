@@ -8,9 +8,21 @@ const controllers = require('require-all')({
 router.prefix('/api')
 
 router
-    .get('/menu', controllers.menu.getMenu)
-    .get('/menu/:id', controllers.menu.getMenu)
-    .post('/menu', controllers.menu.postMenu)
-    .get('/user', controllers.user.getUser)
+    .get('/menu', controllers.menu)
+    .post('/menu', controllers.menu)
+    .put('/menu/:id', controllers.menu)
+    .del('/menu/:id', controllers.menu)
+
+    .get('/captcha', controllers.captcha)
+
+    // .get('/user', controllers.user)
+    // .post('/user', controllers.user)
+    // .put('/user/:id', controllers.user)
+    // .del('/user/:id', controllers.user)
+
+    .post('/register', controllers.user.register)
+    .post('/login', controllers.user.login)
+    .get('/userinfo', controllers.user.userinfo)
+
 
 module.exports = router

@@ -1,9 +1,9 @@
 <template>
     <div class="container">
         <div>
-            <nuxt-link :to="{ path: 'admin/desk' }">
-                后台
-            </nuxt-link>
+            <h1 class="title">
+                rent
+            </h1>
         </div>
     </div>
 </template>

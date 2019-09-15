@@ -2,33 +2,12 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const schema = new Schema({
-    name: {
+    site_name: {
         type: String,
         default: ''
     },
-    value: {
-        type: String,
-        default: ''
-    },
-    slug: {
-        type: String,
-        default: ''
-    },
-    parent_id: {
-        type: String,
-        default: 0
-    },
-    icon: {
-        type: String,
-        default: ''
-    },
-    sort: {
-        type: Number,
-        default: 0
-    },
-    no_delete: {
-        type: Boolean,
-        default: false
+    copyright: {
+        type: String
     },
     created_at: {
         type: Date,
@@ -40,6 +19,7 @@ const schema = new Schema({
     }
 })
 
+// 隐藏一些字段
 schema.options.toJSON = {
     virtuals: true,
     versionKey: false,
@@ -48,5 +28,4 @@ schema.options.toJSON = {
         delete ret._id
     }
 }
-
-mongoose.model('Menu', schema)
+mongoose.model('Config', schema)

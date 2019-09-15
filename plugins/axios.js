@@ -1,14 +1,44 @@
+import { Message } from 'element-ui'
 export default function ({ $axios, redirect }) {
     $axios.onRequest(config => {
-        console.log(config, 87);
         if (config.method == 'get') {
             config.params = Object.assign({}, config.params, config.data)
+        } else if ([
+            'put',
+            'delete'
+        ].includes(config.method)) {
+            if (config.data.id) {
+                config.url += `/${config.data.id}`
+            }
         }
-        console.log(`Making request to ${config.url}`)
+
+        // console.log(`Making request to ${config.url}`)
     })
 
     $axios.onResponse(response => {
-
+        // console.log(response);
+        if (response.config.method != 'get') {
+            if (response.data.code == 1) {
+                Message({
+                    message: 'ok',
+                    type: 'success',
+                    duration: 1000,
+                })
+            } else {
+                Message({
+                    message: response.data.msg,
+                    type: 'error',
+                    duration: 1000,
+                })
+            }
+        } else if (response.data.code != 1) {
+            Message({
+                message: response.data.msg,
+                type: 'error',
+                duration: 1000,
+            })
+        }
+        return response.data
     })
 
     $axios.onError(error => {

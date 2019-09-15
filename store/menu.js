@@ -1,81 +1,6 @@
-const pagesTree = {}
-const options = [
-    {
-        name: '工作台',
-        value: 'Desk',
-        ico: '',
-    },
-    {
-        name: '400电话',
-        value: 'Hotline',
-        visible: {
-            role: []
-        },
-        ico: '',
-        children: [
-            {
-                name: '400电话',
-                value: 'Hotline',
-                ico: 'el-icon-people iconfont',
-                children: [
-                    {
-                        name: '通话记录',
-                        value: 'CallList',
-                        mark: '',
-                        ico: '',
-                    },
-                ]
-            }
-        ]
-    },
-    {
-        name: '权限管理',
-        value: 'Authorities',
-        ico: '',
-        visible: {
-            role: []
-        },
-        children: [
-            {
-                name: '用户管理',
-                value: 'AuthoritiesUsersManage',
-                ico: 'el-icon-people iconfont',
-                children: [
-                    {
-                        name: '角色管理',
-                        value: 'AuthoritiesRoles',
-                        mark: '',
-                        ico: '',
-                    },
-                    {
-                        name: '用户管理',
-                        value: 'AuthoritiesUsers',
-                        mark: '',
-                        ico: ''
-                    },
-                    {
-                        name: '用户分组',
-                        value: 'AuthoritiesUsersGroup',
-                        mark: '',
-                        ico: ''
-                    },
-                    {
-                        name: '用户登录记录',
-                        value: 'AuthoritiesLoginLogs',
-                        mark: '',
-                        ico: ''
-                    },
-                ]
-            }
-        ]
-    },
-]
-
 export const state = () => ({
-    // 数据信息
-    menuData: [],
+    data: [],
     menuActive: '',
-    subMenuData: [],
     subMenuActive: '',
 })
 // 鉴权
@@ -94,19 +19,53 @@ const checkAuth = (menu, userInfo) => {
     }
     return true
 }
-
-const getTree = (list = [], parentID = 0) => {
+/*[{
+    "id" : "5d7bb544a61223b58ce847ce",
+    "name" : "菜单管理",
+    "value" : "/admin/menu",
+    "slug" : "",
+    "parent_id" : "0",
+    "no_delete" : true,
+}]*/
+const getTree = (list = [], parentID = '0') => {
     let tree = []
     list.forEach(item => {
         if (item.parent_id == parentID) {
-            item.children = getTree(list, item.id)
+            let children = getTree(list, item.id)
+            if (children.length) {
+                item.children = children
+            }
             tree.push(item)
         }
     })
     return tree
 }
+const getTopById = (list, id) => {
+    let actItem = list.find(item => item.id == id)
+    if (actItem.parent_id != '0') {
+        actItem = getTopById(list, actItem.parent_id) || {}
+    }
+    return actItem
+}
 
 export const actions = {
+    async getMenuData({ commit, rootGetters }, { route }) {
+        const res = await this.$axios.get('api/menu')
+        if (res.code == 1) {
+            commit('setData', res.data)
+            let _path = route.path
+            let actItem = res.data.find(item => item.value == _path)
+            if (actItem.parent_id == '0') {
+                // 顶级
+                commit('setMenuActive', _path)
+            } else {
+                // 如果是三级，需要找到顶级数据
+                let menuItem = getTopById(res.data, actItem.parent_id)
+                commit('setMenuActive', menuItem.value)
+            }
+            commit('setSubMenuActive', _path)
+        }
+    },
     /**
      * 请求信息
      */
@@ -115,7 +74,7 @@ export const actions = {
             // 是否可见
             .filter(item => checkAuth(item, rootGetters.userInfo))*/
         let ajaxFn = async () => {
-            const res = await this.$axios.$get('api/menu')
+            const res = await this.$axios.get('api/menu')
             const data = getTree(res.data)
             let subMenuData = []
             let menuActive = ''
@@ -154,14 +113,28 @@ export const actions = {
 }
 
 export const mutations = {
-    setSubMenuData(state, data) {
-        state.subMenuData = data
+    setData(state, data) {
+        // console.log('set', data);
+        state.data = data
+    },
+    addMenu(state, data) {
+        // console.log('add', data);
+        state.data.push(data)
+    },
+    deleteMenu(state, data) {
+        // console.log('del', data);
+        let mIndex = state.data.findIndex(item => item.id == data.id)
+        state.data.splice(mIndex, 1)
+    },
+    updateMenu(state, data) {
+        state.data.forEach(item => {
+            if (item.id == data.id) {
+                Object.assign(item, data)
+            }
+        })
     },
     setSubMenuActive(state, subMenuActive) {
         state.subMenuActive = subMenuActive
-    },
-    setMenuData(state, data) {
-        state.menuData = data
     },
     setMenuActive(state, menuActive) {
         state.menuActive = menuActive
@@ -169,8 +142,20 @@ export const mutations = {
 }
 
 export const getters = {
-    menuData  : state => state.menuData,
+    data: state => state.data,
+    allMenuData: state => {
+        return getTree(state.data)
+    },
+    menuData: state => {
+        return state.data.filter(item => item.parent_id == '0')
+    },
     menuActive: state => state.menuActive,
-    subMenuData      : state => state.subMenuData,
+    subMenuData: state => {
+        let activeParentData = getTree(state.data).filter(item => {
+            return item.value == state.menuActive
+        })[0] || {}
+        let activeData = activeParentData.children || []
+        return activeData
+    },
     subMenuActive    : state => state.subMenuActive,
 }

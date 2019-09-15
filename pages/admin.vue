@@ -1,12 +1,21 @@
 <template>
     <el-container style="height: 100vh;">
         <el-aside
-            width="200px"
+            :width="isCollapse ? '64px' : '200px'"
             :style="`background-color: ${menuStyle.backgroundColor}`"
         >
+            <div
+                style="height: 60px;text-align: center;line-height: 60px;color: #fff;"
+                :style="{
+                    fontSize: isCollapse ? '16px' : '22px',
+                    backgroundColor: menuStyle.activeTextColor
+                }"
+            >
+                ESCMS
+            </div>
             <el-menu
                 :default-active="subMenuActive"
-                class="el-menu-vertical-demo"
+                class="el-menu-vertical"
                 :collapse="isCollapse"
                 :background-color="menuStyle.backgroundColor"
                 :text-color="menuStyle.textColor"
@@ -29,20 +38,35 @@
                             slot="title"
                             class="el-title"
                         >
-                            <i :class="item.ico" />
+                            <i :class="item.icon || 'el-icon-document'" />
                             <span>{{ item.name }}</span>
                         </template>
-                        <el-menu-item
-                            v-for="(item1, index1) in item.children"
-                            :key="index1"
-                            :index="item1.value || (index + '-' + index1)"
-                            :route="{name: item1.value}"
-                        >
-                            {{ item1.name }}<el-badge
-                                class="mark"
-                                :value="item1.mark"
-                            />
-                        </el-menu-item>
+                        <template v-for="(item1, index1) in item.children">
+                            <!-- <el-submenu
+                                v-if="item1.children.length"
+                                :key="index1"
+                                :index="item1.value"
+                            >
+                                <span slot="title">{{ item1.name }}</span>
+                                <el-menu-item
+                                    v-for="(item2, index2) in item1.children"
+                                    :key="index2"
+                                    :index="item2.value"
+                                >
+                                    {{ item2.name }}
+                                </el-menu-item>
+                            </el-submenu> -->
+                                <!-- v-else -->
+                            <el-menu-item
+                                :key="index1"
+                                :index="item1.value"
+                            >
+                                {{ item1.name }}<el-badge
+                                    class="mark"
+                                    :value="item1.mark"
+                                />
+                            </el-menu-item>
+                        </template>
                     </el-submenu>
 
                     <el-menu-item
@@ -52,7 +76,7 @@
                         :index="item.value || (index + '')"
                         :route="{name: item.value}"
                     >
-                        <i :class="item.ico" />
+                        <i :class="item.icon || 'el-icon-document'" />
                         <span slot="title">{{ item.name }}<el-badge
                             class="mark"
                             :value="item.mark"
@@ -64,14 +88,21 @@
         <el-container>
             <el-header style="padding: 0;">
                 <div
-                    style="padding: 5px;text-align: center;cursor: pointer;float: left"
+                    style="line-height: 60px;
+                        color: #fff;
+                        text-align: center;
+                        padding: 0 10px;
+                        cursor: pointer;
+                        float: left;
+                        position: relative;
+                        z-index: 99"
                     @click="isCollapse = !isCollapse"
                 >
                     <i :class="['el-icon-s-fold', 'el-icon-s-unfold'][isCollapse * 1]" />
                     {{ {true: '展开', false: '收起'}[isCollapse] }}
                 </div>
                 <el-menu
-                    :default-active="activeIndex"
+                    :default-active="menuActive"
                     class="el-menu-demo"
                     mode="horizontal"
                     router
@@ -92,22 +123,34 @@
                         style="float: right;"
                     >
                         <template slot="title">
-                            abcdefg
+                            {{ userInfo.nickname || userInfo.username }}
                         </template>
                         <el-menu-item index="2-1">
-                            我的资料
+                            <i class="el-icon-user" /> 我的资料
                         </el-menu-item>
                         <el-menu-item index="2-2">
-                            选项2
+                            <i class="el-icon-lock" /> 修改密码
                         </el-menu-item>
                         <el-menu-item index="2-3">
-                            退出
+                            <i class="el-icon-switch-button" /> 退出
                         </el-menu-item>
                     </el-submenu>
+                    <el-menu-item
+                        index=""
+                        style="float: right;"
+                    >
+                        <i class="el-icon-s-home" />
+                        <a
+                            href="/"
+                            target="_blank"
+                        > 网站首页</a>
+                    </el-menu-item>
                 </el-menu>
             </el-header>
-            <el-main><nuxt-child /></el-main>
-            <el-footer><!-- @escms --></el-footer>
+            <el-main>
+                <nuxt-child />
+            </el-main>
+            <el-footer>@escms</el-footer>
         </el-container>
     </el-container>
 </template>
@@ -118,8 +161,6 @@ export default {
     data() {
         return {
             isCollapse: false,
-            activeIndex: '1',
-            activeIndex2: '1',
             menuStyle: {
                 backgroundColor: '#545c64',
                 textColor: '#fff',
@@ -140,7 +181,7 @@ export default {
             menuActive: 'menu/menuActive',
             subMenuData: 'menu/subMenuData',
             subMenuActive: 'menu/subMenuActive',
-            // 'userInfo',
+            userInfo: 'user/userInfo',
         }),
         openeds() {
             let arr = []
@@ -150,14 +191,22 @@ export default {
             return arr
         }
     },
+    created() {
+    },
     mounted() {
-        this.getSubMenuData({
+        this.getMenuData({
             route: this.$route
         })
+        this.getUserInfo()
     },
     methods: {
         ...mapActions({
-            getSubMenuData: 'menu/getSubMenuData',
+            getMenuData: 'menu/getMenuData',
+            getUserInfo: 'user/getUserInfo',
+        }),
+        ...mapMutations({
+            setMenuActive: 'menu/setMenuActive',
+            setSubMenuActive: 'menu/setSubMenuActive'
         }),
         handleOpen(key, keyPath) {
             console.log(key, keyPath)
@@ -166,38 +215,35 @@ export default {
             console.log(key, keyPath)
         },
         handleSelect(key, keyPath) {
-            console.log(key, keyPath)
+            this.setMenuActive(key)
+            this.setSubMenuActive(key)
         },
 
     }
 }
 </script>
 <style>
-  .el-header, .el-footer {
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
+    .el-menu-vertical {
+        border-right: none;
+    }
+    .el-header, .el-footer {
+    }
 
-  .el-aside {
-    color: #333;
-    text-align: center;
-    line-height: 200px;
-  }
+    .el-aside {
+    }
 
-  .el-main {
-    color: #333;
-    text-align: center;
-  }
+    .el-main {
+        padding: 10px;
+    }
 
-  body > .el-container {
-    margin-bottom: 40px;
-  }
+    body > .el-container {
+        margin-bottom: 40px;
+    }
 
-  .el-container:nth-child(5) .el-aside,
-  .el-container:nth-child(6) .el-aside {
-  }
+    .el-container:nth-child(5) .el-aside,
+    .el-container:nth-child(6) .el-aside {
+    }
 
-  .el-container:nth-child(7) .el-aside {
-  }
+    .el-container:nth-child(7) .el-aside {
+    }
 </style>

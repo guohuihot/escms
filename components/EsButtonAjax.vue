@@ -93,10 +93,6 @@ export default {
                 method: this.method,
                 data: this.params
             }).then(res => {
-                this.$message({
-                    message: res.message,
-                    type: 'success',
-                })
                 this.$emit('ajaxThen', res)
             })
         }

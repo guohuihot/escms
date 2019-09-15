@@ -180,11 +180,6 @@ export default {
                     method,
                     data: this.data
                 }).then((res) => {
-                    this.$message({
-                        message: res.message,
-                        type: 'success',
-                        duration: 1000,
-                    })
                     this.dialogVisible = false
 
                     res._data = this.data

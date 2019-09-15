@@ -1,10 +1,6 @@
 <template>
     <div class="container">
-        <div>
-            <nuxt-link :to="{ path: 'admin/desk' }">
-                后台
-            </nuxt-link>
-        </div>
+        <h1>404</h1>
     </div>
 </template>
 

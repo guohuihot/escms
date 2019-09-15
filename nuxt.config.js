@@ -17,7 +17,7 @@ module.exports = {
     /*
   ** Customize the progress-bar color
   */
-    loading: { color: '#fff' },
+    loading: { color: '#ffd04b' },
     /*
   ** Global CSS
   */
@@ -30,7 +30,11 @@ module.exports = {
   */
     plugins: [
         '@/plugins/element-ui',
-        '@/plugins/axios'
+        {
+            src: '@/plugins/set-token',
+            ssr: false
+        },
+        '@/plugins/axios',
     ],
 
     serverMiddleware: [
@@ -70,6 +74,17 @@ module.exports = {
                 '^/api/': '/',
                 changeOrigin: true
             }
+        }
+    },
+    router: {
+        extendRoutes (routes, resolve) {
+            routes = [
+                {
+                    name: 'custom',
+                    path: '*',
+                    component: resolve(__dirname, 'pages/404.vue')
+                }
+            ]
         }
     },
     /*
