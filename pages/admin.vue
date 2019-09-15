@@ -123,6 +123,7 @@
                         style="float: right;"
                     >
                         <template slot="title">
+                            <el-avatar icon="el-icon-user-solid" size="small"></el-avatar>
                             {{ userInfo.nickname || userInfo.username }}
                         </template>
                         <el-menu-item index="2-1">

@@ -27,6 +27,24 @@
                 autocomplete="off"
             />
         </el-form-item>
+        <el-form-item
+            label="验证码"
+            prop="captcha"
+        >
+            <el-input
+                v-model="ruleForm.captcha"
+                type="text"
+                autocomplete="off"
+            >
+                <template #suffix>
+                    <Captcha
+                        :width="100"
+                        :height="36"
+                        style="margin-top: 2px;"
+                    />
+                </template>
+            </el-input>
+        </el-form-item>
 
         <el-form-item>
             <el-button
@@ -43,7 +61,10 @@
                         忘记密码
                     </nuxt-link>
                 </el-col>
-                <el-col :span="12" class="text-right">
+                <el-col
+                    :span="12"
+                    class="text-right"
+                >
                     <nuxt-link :to="{ path: '/register' }">
                         新用户
                     </nuxt-link>
@@ -54,8 +75,12 @@
 </template>
 
 <script>
+import Captcha from '@/components/Captcha'
 
 export default {
+    components: {
+        Captcha
+    },
     data() {
         let validatePass = (rule, value, callback) => {
             if (value === '') {
@@ -80,10 +105,12 @@ export default {
             ruleForm: {
                 username: '',
                 password: '',
+                captcha: '',
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-                password: [{ validator: validatePass, trigger: 'blur' }],
+                password: [{ required: true, validator: validatePass, trigger: 'blur' }],
+                captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
                 checkPass: [{ validator: validatePass2, trigger: 'blur' }],
             }
         }

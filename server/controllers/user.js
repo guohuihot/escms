@@ -4,44 +4,6 @@ const User = mongoose.model('User')
 const crypto = require('crypto')
 const   jwt = require('jsonwebtoken')
 
-/*module.exports = async (ctx) => {
-    try {
-        ctx.status = 200
-        let resData = []
-        if (ctx.request.method == 'GET') {
-            resData = await User.find(Object.assign({}, ctx.params, ctx.query))
-            ctx.body = JSON.stringify({
-                status: 1,
-                data: resData || []
-            })
-        } else if (ctx.request.method == 'POST') {
-            resData = await User.create(ctx.request.body)
-            ctx.body = JSON.stringify({
-                status: 1,
-                data: resData,
-            })
-        } else if (ctx.request.method == 'PUT') {
-            resData = ctx.request.body
-            await User.updateOne({ _id: ctx.params.id }, resData)
-            ctx.body = JSON.stringify({
-                status: 1,
-                data: resData,
-            })
-        } else if (ctx.request.method == 'DELETE') {
-            resData = ctx.request.body
-            await User.deleteOne({ _id: ctx.params.id })
-            ctx.body = JSON.stringify({
-                status: 1,
-                data: resData,
-            })
-        }
-    } catch (error) {
-        ctx.body = {
-            status: 0,
-            message: error
-        }
-    }
-}*/
 class UserController {
     // 用户注册
     static async register(ctx) {
@@ -75,7 +37,7 @@ class UserController {
             const token = jwt.sign({
                 username: result.username,
                 id: result.id
-            }, 'token', { expiresIn: 60 * 60 })
+            }, 'token', { expiresIn: '30 days' })
             return ctx.send({
                 token
             }, '登录成功')
