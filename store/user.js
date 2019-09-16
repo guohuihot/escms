@@ -13,11 +13,9 @@ export const actions = {
 
 export const mutations = {
     setUserInfo(state, data) {
-        // console.log('set', data);
         state.userInfo = data
     },
     unsetUserInfo(state) {
-        // console.log('set', data);
         state.data = {}
     }
 }

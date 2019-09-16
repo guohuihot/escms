@@ -7,7 +7,7 @@
 </template>
 <script>
 export default {
-    name: 'Captcha',
+    name: 'EsCaptcha',
     props: {
         width: {
             type: Number,

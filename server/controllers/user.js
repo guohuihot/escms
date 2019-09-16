@@ -28,6 +28,12 @@ class UserController {
         if (!data.username || !data.password) {
             return ctx.sendError('000002', '用户名或密码不能为空')
         }
+        if (!data.captcha) {
+            return ctx.sendError('000002', '验证码不能为空')
+        }
+        if (data.captcha != ctx.session.captcha) {
+            return ctx.sendError('000002', '验证码错误')
+        }
         const result = await User.findOne({
             username: data.username,
             password: crypto.createHash('md5').update(data.password).digest('hex')

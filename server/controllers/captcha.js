@@ -10,8 +10,9 @@ let options = {
     color: true, // 验证码的字符是否有颜色，默认没有，如果设定了背景，则默认有
     background: '#eee' // 验证码图片背景颜色
 }
-module.exports = async (ctx) => {
+module.exports = (ctx) => {
     Object.assign(options, ctx.query)
-    const cap = svgCaptcha.create(options)
+    let cap = svgCaptcha.create(options)
+    // ctx.session.captcha = cap.text.toLowerCase() // 验证码字符，忽略大小写
     ctx.send(cap.data)
 }

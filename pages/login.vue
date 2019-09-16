@@ -37,7 +37,7 @@
                 autocomplete="off"
             >
                 <template #suffix>
-                    <Captcha
+                    <es-captcha
                         :width="100"
                         :height="36"
                         style="margin-top: 2px;"
@@ -75,11 +75,12 @@
 </template>
 
 <script>
-import Captcha from '@/components/Captcha'
+import EsCaptcha from '@/components/EsCaptcha'
+import { Message } from 'element-ui'
 
 export default {
     components: {
-        Captcha
+        EsCaptcha
     },
     data() {
         let validatePass = (rule, value, callback) => {
@@ -115,6 +116,11 @@ export default {
             }
         }
     },
+    beforeMount() {
+        if (localStorage.getItem('token')) {
+            this.goAdmin()
+        }
+    },
     methods: {
         async submitForm(formName) {
             let valid = await this.$refs[formName].validate()
@@ -126,12 +132,15 @@ export default {
                 })
                 if (res.code == 1) {
                     localStorage.setItem('token', res.data.token)
-                    localStorage.setItem('token_exp', new Date().getTime())
-                    this.$router.push({
-                        path: '/admin/desk'
-                    })
+                    this.goAdmin()
                 }
             }
+        },
+        // 跳转到后台
+        goAdmin() {
+            this.$router.push({
+                path: '/admin/desk'
+            })
         }
     }
 }
