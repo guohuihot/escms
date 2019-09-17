@@ -1,5 +1,4 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const { Schema, model } = require('mongoose')
 
 const schema = new Schema({
     site_name: {
@@ -9,6 +8,10 @@ const schema = new Schema({
     copyright: {
         type: String
     },
+    current: {
+        type: Boolean,
+        default: false
+    },
     created_at: {
         type: Date,
         default: Date.now
@@ -17,15 +20,8 @@ const schema = new Schema({
         type: Date,
         default: Date.now
     }
+}, {
+    _id: false
 })
 
-// 隐藏一些字段
-schema.options.toJSON = {
-    virtuals: true,
-    versionKey: false,
-    transform(doc, ret) {
-        ret.id = ret._id
-        delete ret._id
-    }
-}
-mongoose.model('Config', schema)
+model('Config', schema)

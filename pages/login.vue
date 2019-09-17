@@ -2,7 +2,6 @@
     <el-form
         ref="ruleForm"
         :model="ruleForm"
-        status-icon
         :rules="rules"
         label-width="100px"
         class="form"

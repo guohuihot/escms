@@ -1,7 +1,10 @@
 <template>
-    <div style="background-color: #fff;overflow: hidden;" v-loading="loading">
+    <div
+        v-loading="loading"
+        style="background-color: #fff;overflow: hidden;"
+    >
         <es-form
-            url="CONFIGS_CONFIGS"
+            :url="URL"
             :form-items="formItems"
             style="width: 600px;margin: 15px 0;"
             :data="data"
@@ -18,6 +21,7 @@ export default {
     mixins: [],
     data() {
         return {
+            URL: 'api/config',
             loading: false,
             data: {
 
@@ -48,7 +52,7 @@ export default {
         getData() {
             this.loading = true
             this.$axios({
-                url: 'CONFIGS_CONFIGS'
+                url: this.URL
             }).then(res => {
                 this.data = res.data
                 this.loading = false

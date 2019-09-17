@@ -56,7 +56,7 @@
                                     {{ item2.name }}
                                 </el-menu-item>
                             </el-submenu> -->
-                                <!-- v-else -->
+                            <!-- v-else -->
                             <el-menu-item
                                 :key="index1"
                                 :index="item1.value"
@@ -112,7 +112,7 @@
                     @select="handleSelect"
                 >
                     <el-menu-item
-                        v-for="(item, i) in menuData"
+                        v-for="item in menuData"
                         :key="item.value"
                         :index="item.value"
                     >
@@ -123,7 +123,10 @@
                         style="float: right;"
                     >
                         <template slot="title">
-                            <el-avatar icon="el-icon-user-solid" size="small"></el-avatar>
+                            <el-avatar
+                                icon="el-icon-user-solid"
+                                size="small"
+                            />
                             {{ userInfo.nickname || userInfo.username }}
                         </template>
                         <el-menu-item index="2-1">
@@ -132,19 +135,24 @@
                         <el-menu-item index="2-2">
                             <i class="el-icon-lock" /> 修改密码
                         </el-menu-item>
-                        <el-menu-item index="2-3">
+                        <el-menu-item
+                            index=""
+                            @click="logout"
+                        >
                             <i class="el-icon-switch-button" /> 退出
                         </el-menu-item>
                     </el-submenu>
                     <el-menu-item
-                        index=""
+                        :index="null"
                         style="float: right;"
                     >
-                        <i class="el-icon-s-home" />
                         <a
                             href="/"
                             target="_blank"
-                        > 网站首页</a>
+                        >
+                            <i class="el-icon-s-home" />
+                            网站首页
+                        </a>
                     </el-menu-item>
                 </el-menu>
             </el-header>
@@ -192,8 +200,6 @@ export default {
             return arr
         }
     },
-    created() {
-    },
     mounted() {
         this.getMenuData({
             route: this.$route
@@ -219,7 +225,12 @@ export default {
             this.setMenuActive(key)
             this.setSubMenuActive(key)
         },
-
+        logout() {
+            localStorage.removeItem('token')
+            this.$router.push({
+                path: '/login'
+            })
+        }
     }
 }
 </script>

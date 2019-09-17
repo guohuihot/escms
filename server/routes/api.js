@@ -24,5 +24,7 @@ router
     .post('/login', controllers.user.login)
     .get('/userinfo', controllers.user.userinfo)
 
+    .get('/config', controllers.config)
+    .post('/config', controllers.config)
 
 module.exports = router

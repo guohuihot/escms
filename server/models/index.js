@@ -4,6 +4,7 @@ const config = require('../../nuxt.config.js')
 //
 require('./menu')
 require('./user')
+require('./config')
 //
 const User = mongoose.model('User')
 const mongoUrl = `mongodb://${config.mongodb.host}:${config.mongodb.port}/${config.mongodb.database}`

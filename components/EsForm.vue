@@ -184,6 +184,7 @@ export default {
     props: {
         url: {
             type: [String],
+            default: ''
         },
         labelWidth: {
             type: [
@@ -232,10 +233,6 @@ export default {
     watch: {
 
     },
-    created() {
-    },
-    mounted() {
-    },
     methods: {
         handleUploadChange(imgData) {
             Object.keys(imgData).forEach((k) => {
@@ -258,11 +255,6 @@ export default {
                     method: 'post',
                     data: this.data
                 }).then((res) => {
-                    this.$message({
-                        message: res.message || '成功',
-                        type: 'success',
-                        duration: 1000,
-                    })
                     this.dialogVisible = false
 
                     res._data = this.data
