@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const User = mongoose.model('User')
 
 const crypto = require('crypto')
-const   jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
 class UserController {
     // 用户注册
@@ -24,15 +24,15 @@ class UserController {
     }
     // 用户登录
     static async login(ctx) {
+        // 验证码验证
+        ctx.validateCaptcha()
+
         const data = ctx.request.body
         if (!data.username || !data.password) {
             return ctx.sendError('000002', '用户名或密码不能为空')
         }
         if (!data.captcha) {
             return ctx.sendError('000002', '验证码不能为空')
-        }
-        if (data.captcha != ctx.session.captcha) {
-            return ctx.sendError('000002', '验证码错误')
         }
         const result = await User.findOne({
             username: data.username,

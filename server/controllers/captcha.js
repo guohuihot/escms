@@ -13,6 +13,6 @@ let options = {
 module.exports = (ctx) => {
     Object.assign(options, ctx.query)
     let cap = svgCaptcha.create(options)
-    // ctx.session.captcha = cap.text.toLowerCase() // 验证码字符，忽略大小写
+    ctx.session.captcha = cap.text.toLowerCase() // 验证码字符，忽略大小写
     ctx.send(cap.data)
 }

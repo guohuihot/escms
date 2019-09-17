@@ -5,9 +5,11 @@ const bodyParser        = require('koa-bodyparser')
 const cors              = require('koa-cors')
 const convert           = require('koa-convert')
 const koajwt            = require('koa-jwt')
+const session           = require('koa-session')
 
 const sendHandle        = require('./middlewares/sendHandle.js')
 const errorHandle       = require('./middlewares/errorHandle.js')
+const captcha           = require('./middlewares/captcha.js')
 const app               = new Koa()
 
 // data数据库相关
@@ -24,6 +26,24 @@ app.use(convert(cors()))
 app.use(sendHandle())
 // 错误处理
 app.use(errorHandle)
+// session相关
+app.keys = ['captcha']
+const CONFIG = {
+    key: 'es:session', /** (string) cookie key (default is koa:sess) */
+    /** (number || 'session') maxAge in ms (default is 1 days) */
+    /** 'session' will result in a cookie that expires when session/browser is closed */
+    /** Warning: If a session cookie is stolen, this cookie will never expire */
+    maxAge: 'session', // cookie的过期时间 maxAge in ms (default is 1 days)
+    autoCommit: true, /** (boolean) automatically commit headers (default true) */
+    overwrite: true, //是否可以overwrite    (默认default true)
+    httpOnly: true, /** (boolean) httpOnly or not (default true) */
+    signed: true, /** (boolean) signed or not (default true) */
+    rolling: false, /** (boolean) Force a session identifier cookie to be set on every response. The expiration is reset to the original maxAge, resetting the expiration countdown. (default is false) */
+    renew: false, /** (boolean) renew session when session is nearly expired, so we can always keep user logged in. (default is false)*/
+}
+app.use(session(CONFIG, app))
+// 验证码
+app.use(captcha())
 // 验证token
 app.use(koajwt({
     secret: 'token'
