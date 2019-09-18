@@ -26,14 +26,14 @@ export default function ({ $axios, redirect }) {
                 })
             } else {
                 Message({
-                    message: response.data.msg,
+                    message: response.data.message,
                     type: 'error',
                     duration: 1000,
                 })
             }
         } else if (response.data.code != 1) {
             Message({
-                message: response.data.msg,
+                message: response.data.message,
                 type: 'error',
                 duration: 1000,
             })

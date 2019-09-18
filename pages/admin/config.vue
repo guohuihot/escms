@@ -54,7 +54,7 @@ export default {
             this.$axios({
                 url: this.URL
             }).then(res => {
-                this.data = res.data
+                this.data = res.data || {}
                 this.loading = false
             }).catch(() => {
                 this.loading = false

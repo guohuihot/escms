@@ -30,6 +30,7 @@
             <el-form
                 ref="form"
                 :model="data"
+                size="medium"
                 :label-width="labelWidth + 'px'"
                 class="form"
             >
